@@ -42,7 +42,7 @@ if __name__ == "__main__":
     while True:
         # Get tweets here
         seenTweets = db.seenTweets.find({})
-        mentions = twitter.mentions()
+        mentions = twitter.api.mentions()
         for tweet in mentions:
             if db.seenTweets.find({tweetId: tweet.id}) is None:
                 twitter.tweet("Great! Create task for {0}:{1}".format(tweet.author.screen_name, tweet.entries['hashtags']));
