@@ -44,7 +44,7 @@ if __name__ == "__main__":
     while True:
         # Get tweets here
         for tweet in twitter.mentions_timeline():
-            if db.seenTweets.find({tweetId: tweet.id}) is None:
+            if db.seenTweets.find({"tweetId": tweet.id}) is None:
                 twitter.tweet("Great! Create task for {0}:{1}".format(tweet.author.screen_name, tweet.entries['hashtags']));
             else:
                 db.seenTweets.insert({tweetId: tweet.id})
