@@ -27,6 +27,8 @@ class TwitterAPI:
         """Send a tweet"""
         self.api.update_status(message)
 
+    def mentions:
+        return self.api.mentions()
 
 if __name__ == "__main__":
 
@@ -42,8 +44,7 @@ if __name__ == "__main__":
     while True:
         # Get tweets here
         seenTweets = db.seenTweets.find({})
-        mentions = twitter.api.mentions()
-        for tweet in mentions:
+        for tweet in twitter.mentions():
             if db.seenTweets.find({tweetId: tweet.id}) is None:
                 twitter.tweet("Great! Create task for {0}:{1}".format(tweet.author.screen_name, tweet.entries['hashtags']));
             else:
