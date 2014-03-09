@@ -43,6 +43,5 @@ if __name__ == "__main__":
         lastTweetId = db.lastTweet.find({}).limit(0)[0].lastTweetId
         mentions = API.mentions(lastTweetId)
         for tweet in mentions:
-            puts twitter.tweet("Great! Create task for {0}:{1}".format(tweet.author.screen_name, tweet.entries['hashtags']));
             twitter.tweet("Great! Create task for {0}:{1}".format(tweet.author.screen_name, tweet.entries['hashtags']));
         time.sleep(60)
