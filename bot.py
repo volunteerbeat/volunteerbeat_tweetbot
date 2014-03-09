@@ -38,12 +38,14 @@ if __name__ == "__main__":
           return Connection()
 
     twitter = TwitterAPI()
-    twitter.tweet("Hello world again!") #You probably want to remove this line
     db = mongo_conn().app22869812
     while True:
         # Get tweets here
-        lastTweetId = db.lastTweet.find({}).limit(0)[0].lastTweetId
-        mentions = API.mentions(lastTweetId)
+        seenTweets = db.seenTweets.find({})
+        mentions = API.mentions()
         for tweet in mentions:
-            twitter.tweet("Great! Create task for {0}:{1}".format(tweet.author.screen_name, tweet.entries['hashtags']));
+            if db.seenTweets.find({tweetId: tweet.id}) is None:
+                twitter.tweet("Great! Create task for {0}:{1}".format(tweet.author.screen_name, tweet.entries['hashtags']));
+            else:
+                db.seenTweets.insert({tweetId: tweet.id})
         time.sleep(60)
