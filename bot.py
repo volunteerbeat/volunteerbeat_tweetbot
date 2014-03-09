@@ -27,6 +27,9 @@ class TwitterAPI:
         """Send a tweet"""
         self.api.update_status(message)
 
+
+if __name__ == "__main__":
+
     def mongo_conn():
       # Format: MONGOHQ_URL: mongodb://<user>:<pass>@<base_url>:<port>/<url_path>
       if os.environ.get('MONGOHQ_URL'):
@@ -34,7 +37,6 @@ class TwitterAPI:
       else:
           return Connection()
 
-if __name__ == "__main__":
     twitter = TwitterAPI()
     twitter.tweet("Hello world again!") #You probably want to remove this line
     db = mongo_conn().app22869812
