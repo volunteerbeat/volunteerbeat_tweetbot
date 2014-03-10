@@ -71,4 +71,4 @@ if __name__ == "__main__":
                 print "Status of request: {0}".format(r.status_code)
                 print "Created task! {0}".format(r.json()['id'])
                 db.seenTweets.insert({"tweetId": tweet.id})
-        time.sleep(60)
+        time.sleep(120)
