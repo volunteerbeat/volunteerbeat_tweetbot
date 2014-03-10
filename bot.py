@@ -1,6 +1,7 @@
 import os
 import time
 import tweepy
+import requests
 
 
 from pymongo import Connection
@@ -41,11 +42,27 @@ if __name__ == "__main__":
 
     twitter = TwitterAPI()
     db = mongo_conn().app22869812
+    
+    headers = {'Content-Type': 'application/json', 'Accept': 'application/vnd.volunteerbeat-v1+json'}
+    login_payload = {'email': 'facebook@idreamz.net', 'password': 'codepathdemo'}
+    r = requests.post("http://api.volunteerbeat.com/session", data=login_payload, headers=headers)
+    my_cookies = r.cookies
+
+    # Log into our server.
     while True:
         # Get tweets here
         for tweet in twitter.mentions_timeline():
             if db.seenTweets.find({"tweetId": tweet.id}).count() == 0:
-                twitter.tweet("Great! Create task for {0}:{1}".format(tweet.author.screen_name, tweet.entities['hashtags']));
-            else:
+                task_payload = {
+                    "description": "This is a simple task",
+                    "details": "This is a lot more information about the task, this should only be displayed to volunteers who have been approved for the task",
+                    "starts_at": "2014-02-18T08:43:30Z",
+                    "location": {
+                        "latitude": 40.22,
+                        "longitude": -120.11
+                    },
+                "category_id": 1
+                }
+                r = requests.post("http://api.volunteerbeat.com/tasks", data=task_payload, cookies=my_cookies)
                 db.seenTweets.insert({"tweetId": tweet.id})
         time.sleep(60)
