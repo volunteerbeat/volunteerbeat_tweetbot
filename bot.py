@@ -54,6 +54,7 @@ if __name__ == "__main__":
     while True:
         # Get tweets here
         for tweet in twitter.mentions_timeline():
+            print "Checking tweet ...{0}".format(tweet.id)
             if db.seenTweets.find({"tweetId": tweet.id}).count() == 0:
                 task_payload = {
                     "description": "This is a simple task",
@@ -63,10 +64,11 @@ if __name__ == "__main__":
                         "latitude": 40.22,
                         "longitude": -120.11
                     },
-                "category_id": 1
+                    "category_id": 1
                 }
+                print "Creating a task!"
                 r = requests.post("http://api.volunteerbeat.com/tasks", data=json.dumps(task_payload), cookies=my_cookies, headers=headers)
-                db.seenTweets.insert({"tweetId": tweet.id})
                 print "Status of request: {0}".format(r.status_code)
                 print "Created task! {0}".format(r.json()['id'])
+                db.seenTweets.insert({"tweetId": tweet.id})
         time.sleep(60)
