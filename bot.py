@@ -2,7 +2,7 @@ import os
 import time
 import tweepy
 import requests
-
+import json
 
 from pymongo import Connection
 
@@ -45,7 +45,9 @@ if __name__ == "__main__":
     
     headers = {'Content-Type': 'application/json', 'Accept': 'application/vnd.volunteerbeat-v1+json'}
     login_payload = {'email': 'facebook@idreamz.net', 'password': 'codepathdemo'}
-    r = requests.post("http://api.volunteerbeat.com/session", data=login_payload, headers=headers)
+    print "Logging in..."
+    r = requests.post("http://api.volunteerbeat.com/session", data=json.dumps(login_payload), headers=headers)
+    print "Log in status: {0}".format(r.status_code)
     my_cookies = r.cookies
 
     # Log into our server.
@@ -63,6 +65,8 @@ if __name__ == "__main__":
                     },
                 "category_id": 1
                 }
-                r = requests.post("http://api.volunteerbeat.com/tasks", data=task_payload, cookies=my_cookies)
+                r = requests.post("http://api.volunteerbeat.com/tasks", data=json.dumps(task_payload), cookies=my_cookies, headers=headers)
                 db.seenTweets.insert({"tweetId": tweet.id})
+                print "Status of request: {0}".format(r.status_code)
+                print "Created task! {0}".format(r.json()['id'])
         time.sleep(60)
